@@ -1,8 +1,7 @@
 # Magic The Gathering: Enchantment Deck Library
 
-<img width="230" height="520" alt="Screenshot 2023-11-16 at 22 06 21" src="https://github.com/sadstitch003/MTG-App/assets/80204631/cc455f77-5f9b-46c7-a514-7ce59dd3e071" style="padding: 10">
-
-<img width="230" height="520" alt="Screenshot 2023-11-16 at 22 10 13" src="https://github.com/sadstitch003/MTG-App/assets/80204631/bd199fe5-48c1-49a0-9f03-d6e0ce69bc4f" style="padding: 10">
+<img width="230" height="520" padding="20px" alt="Screenshot 2023-11-16 at 22 06 21" src="https://github.com/sadstitch003/MTG-App/assets/80204631/cc455f77-5f9b-46c7-a514-7ce59dd3e071">
+<img width="230" height="520" alt="Screenshot 2023-11-16 at 22 10 13" src="https://github.com/sadstitch003/MTG-App/assets/80204631/bd199fe5-48c1-49a0-9f03-d6e0ce69bc4f">
 
 ---
 
