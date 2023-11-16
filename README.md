@@ -1,9 +1,11 @@
 # Magic The Gathering: Enchantment Deck Library
 
-<img width="230" alt="Screenshot 2023-11-16 at 22 06 21" src="https://github.com/sadstitch003/MTG-App/assets/80204631/cc455f77-5f9b-46c7-a514-7ce59dd3e071">
+<img width="230" height="800" alt="Screenshot 2023-11-16 at 22 06 21" src="https://github.com/sadstitch003/MTG-App/assets/80204631/cc455f77-5f9b-46c7-a514-7ce59dd3e071">
 
   
-  <img width="230" alt="Screenshot 2023-11-16 at 22 10 13" src="https://github.com/sadstitch003/MTG-App/assets/80204631/bd199fe5-48c1-49a0-9f03-d6e0ce69bc4f">
+  <img width="230" height="800" alt="Screenshot 2023-11-16 at 22 10 13" src="https://github.com/sadstitch003/MTG-App/assets/80204631/bd199fe5-48c1-49a0-9f03-d6e0ce69bc4f">
+
+<br>
 
 Welcome to the Magic The Gathering: Enchantment Deck Library! This application is designed to assist players in managing and organizing their enchantment-based decks efficiently. Whether you're a seasoned Magic: The Gathering player or new to the game, this tool aims to simplify the process of creating, managing, and tracking enchantment-themed decks.
 
