@@ -9,11 +9,13 @@ struct MTGCard: Codable, Identifiable {
     var oracle_text: String
     var image_uris: ImageURIs?
     var legalities: Legalities?
+    var mana_cost: String
 
     struct ImageURIs: Codable {
         var small: String?
         var normal: String?
         var large: String?
+        var art_crop: String?
     }
 
     struct Legalities: Codable {

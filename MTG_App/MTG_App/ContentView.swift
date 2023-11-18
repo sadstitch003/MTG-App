@@ -1,42 +1,66 @@
 import SwiftUI
 
 struct MTGCardView: View {
+    @State private var isShowingFullCard = false
     var card: MTGCard
-    
     var body: some View {
         ScrollView(){
             VStack {
-                AsyncImage(url: URL(string: card.image_uris?.large ?? "")) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    case .failure:
-                        Image(systemName: "exclamationmark.triangle")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.red)
-                    case .empty:
-                        ProgressView()
-                    @unknown default:
-                        ProgressView()
+                Button(action: {
+                    isShowingFullCard.toggle()
+                }) {
+                    AsyncImage(url: URL(string: card.image_uris?.art_crop ?? "")) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        case .failure:
+                            Image(systemName: "exclamationmark.triangle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.gray)
+                        case .empty:
+                            ProgressView()
+                        @unknown default:
+                            ProgressView()
+                        }
                     }
                 }
-            }.padding(.top, 100)
-            VStack {
-                Text(card.name)
-                    .font(.title)
-                    .padding()
+                .buttonStyle(PlainButtonStyle()) // Remove the button's default style
+                
+                // Full Card View
+                .fullScreenCover(isPresented: $isShowingFullCard) {
+                    FullCardView(isPresented: $isShowingFullCard, card: card)
+                }
+            }
+            .padding(.top, 100)
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(card.name)
+                        .font(.system(size: 24))
+                        .bold()
+                    
+                    Spacer()
+                    parseManaCost(manaCost: card.mana_cost)
+                }
+                
+                Text(card.type_line)
+                    .font(.system(size: 16))
+                    .bold()
                 
                 VStack(alignment: .leading) {
-                    Text("Type: \(card.type_line)")
-                    Text("Oracle Text: \(card.oracle_text)")
+                    Text(card.oracle_text)
+                        .font(.system(size: 12))
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
                 
                 Text("Legalities:")
                     .font(.headline)
-                    .padding()
                 
                 HStack(alignment: .top){
                     VStack(alignment: .leading){
@@ -156,8 +180,54 @@ struct MTGCardView: View {
                 .font(.system(size: 12))
         }
     }
+    
+    private func parseManaCost(manaCost: String) -> some View {
+        let manaSymbols = manaCost.components(separatedBy: CharacterSet(charactersIn: "{}"))
+            .filter { !$0.isEmpty }
+        
+        return HStack(spacing: 5) {
+            ForEach(manaSymbols, id: \.self) { symbol in
+                Image(symbol)
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.black)
+            }
+        }
+    }
 }
 
+struct FullCardView: View {
+    @Binding var isPresented: Bool
+    var card: MTGCard
+    
+    var body: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            AsyncImage(url: URL(string: card.image_uris?.large ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                case .failure:
+                    Image(systemName: "exclamationmark.triangle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.gray)
+                case .empty:
+                    ProgressView()
+                @unknown default:
+                    ProgressView()
+                }
+            }
+            .aspectRatio(contentMode: .fit)
+        }
+        .onTapGesture {
+            isPresented = false
+        }
+    }
+}
 
 
 struct ContentView: View {
@@ -189,7 +259,6 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 HStack {
-                    
                     SearchBar(text: $searchText)
                     
                     Button(action: {
@@ -197,13 +266,13 @@ struct ContentView: View {
                     }) {
                         Image(systemName: isAscendingOrder ? "arrow.up" : "arrow.down")
                             .padding(0)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.black)
                     }
-                    .padding(.trailing, 14)
+                    .padding(.trailing, 20)
                 }
 
                 ScrollView {
-                    LazyVGrid(columns: Array(repeating: GridItem(), count: 5), spacing: 16) {
+                    LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 8) {
                         ForEach(filteredCards) { card in
                             NavigationLink(destination: MTGCardView(card: card)) {
                                 MTGCardRow(card: card)
@@ -225,7 +294,9 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationBarTitle("MTG Cards")
+            .navigationBarTitle("Magic The Gathering")
+            .navigationBarTitleDisplayMode(.inline)
+            .foregroundColor(.black)
         }
     }
 
@@ -244,7 +315,6 @@ struct ContentView: View {
 
 struct MTGCardRow: View {
     var card: MTGCard
-    
     var body: some View {
         VStack {
             // Tampilkan gambar kartu
@@ -254,19 +324,20 @@ struct MTGCardRow: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: 100) // Adjust the height as needed
+                        .frame(height: 120) // Adjust the height as needed
+                        .cornerRadius(5)
                 case .failure:
                     Image(systemName: "exclamationmark.triangle")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
-                        .frame(height: 100) // Adjust the height as needed
+                        .frame(height: 120) // Adjust the height as needed
                 case .empty:
                     ProgressView()
-                        .frame(height: 100) // Adjust the height as needed
+                        .frame(height: 120) // Adjust the height as needed
                 @unknown default:
                     ProgressView()
-                        .frame(height: 100) // Adjust the height as needed
+                        .frame(height: 120) // Adjust the height as needed
                 }
                 
                 VStack(){
@@ -274,6 +345,7 @@ struct MTGCardRow: View {
                         .font(.caption)
                         .padding(.top, 4)
                 }
+                
                 Spacer()
             }
         }
@@ -290,6 +362,7 @@ struct SearchBar: View {
                 .background(Color(.systemGray5))
                 .cornerRadius(8)
                 .padding([.leading, .trailing], 0)
+                .foregroundColor(.black)
 
             HStack(){
                 Spacer()
